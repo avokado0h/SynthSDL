@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
-#include <math.h>
 #include <iostream>
+#include <math.h>
 
 #include "audio.h"
 
