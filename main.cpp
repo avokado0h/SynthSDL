@@ -1,8 +1,6 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <math.h>
- 
- #pragma comment(linker, "/SUBSYSTEM:CONSOLE")
 
 const int WIDTH = 800, HEIGHT = 600;
 using namespace std;
