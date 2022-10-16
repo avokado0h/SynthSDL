@@ -23,7 +23,7 @@ SDL_AudioDeviceID audioDeviceInit(mySound* sndCtrl, SDL_AudioCallback funcPtr)
     audio_spec.freq = MY_SAMP_RATE;
     audio_spec.format = AUDIO_S16SYS;
     audio_spec.channels = 1;
-    audio_spec.samples = 1024;
+    audio_spec.samples = 512;
     audio_spec.callback = funcPtr;
     audio_spec.userdata = sndCtrl; // audio callback function gets called with this struct
 

@@ -10,6 +10,8 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+int remapFreq(int x);
+
 int main(int argc, char *argv[])
 {
 
@@ -40,6 +42,9 @@ int main(int argc, char *argv[])
         if(myInputs.exit) break;
         // update vars
         sine.vol = myInputs.vol;
+        sine.freq = remapFreq(myInputs.mouse.x);
+        std::cout << remapFreq(myInputs.mouse.x) << std::endl;
+
 
         // draw bgnd color
         screenClear(&ctrl);
@@ -57,4 +62,10 @@ int main(int argc, char *argv[])
     SDL_Quit();
 
     return EXIT_SUCCESS;
+}
+
+int remapFreq(int x)
+{
+    int freq = (int)(11.5 * x + 500);
+    return freq;
 }
