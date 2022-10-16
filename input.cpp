@@ -11,11 +11,28 @@ void getInputs(inputVars* iv)
 
     SDL_PollEvent(&windowEvent);
 
-    if (windowEvent.type == SDL_QUIT) iv->exit = true;
+    if (windowEvent.type == SDL_QUIT) 
+        iv->exit = true;
 
-    if (windowEvent.type == SDL_MOUSEWHEEL)
+    else if (windowEvent.type == SDL_MOUSEWHEEL)
     {
-        if(windowEvent.wheel.y > 0)         iv->vol += 100;
-        else if(windowEvent.wheel.y < 0)    iv->vol -= 100;
+        if(windowEvent.wheel.y > 0) 
+            iv->vol += 100;
+        else if(windowEvent.wheel.y < 0)    
+            iv->vol -= 100;
     }
+
+    else if( windowEvent.type == SDL_KEYDOWN )
+    {
+        switch( windowEvent.key.keysym.sym )
+        {
+            case SDLK_ESCAPE:
+                iv->exit = true;
+                break;
+
+            default:
+                break;
+        }
+    }
+
 }
