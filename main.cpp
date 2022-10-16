@@ -1,4 +1,3 @@
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
@@ -6,7 +5,9 @@
 
 #include "audio.h"
 
-const int WIDTH = 800, HEIGHT = 600;
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    SDL_Window* window = SDL_CreateWindow("ExtremelyGoodSoundingSyntesizer -EGSS- Version 1.0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+    SDL_Window* window = SDL_CreateWindow("ExtremelyGoodSoundingSyntesizer -EGSS- Version 1.0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 
     if (NULL == window) 
     {
@@ -27,22 +28,12 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    mySound sine = {0.0, 1000.0, 5000.0};
-
-    // opening an audio device:
-    SDL_AudioSpec audio_spec;
-    SDL_zero(audio_spec);
-    audio_spec.freq = 44100;
-    audio_spec.format = AUDIO_S16SYS;
-    audio_spec.channels = 1;
-    audio_spec.samples = 1024;
-    audio_spec.callback = transferSamples;
-    audio_spec.userdata = &sine;
-
-
-    SDL_AudioDeviceID audio_device;
-    audio_device = SDL_OpenAudioDevice(NULL, 0, &audio_spec, NULL, 0);
-
+    mySound sine;
+    sine.freq = 1000;
+    sine.time = 0;
+    sine.vol = 1 / 20.0 * (2^16/2); // 20% vol
+    SDL_AudioDeviceID audio_device = audioDeviceInit(&sine, transferSamples);
+    
     // main event loop
     SDL_Event windowEvent;
 
@@ -68,7 +59,8 @@ int main(int argc, char *argv[])
     Message_rect.w = 300; // controls the width of the rect
     Message_rect.h = 20; // controls the height of the rect
 
-    SDL_PauseAudioDevice(audio_device, 0); // start sine wave generator
+    audioDeviceEnable(audio_device);
+
     while (true)
     {
         if (SDL_PollEvent(&windowEvent))
@@ -104,8 +96,9 @@ int main(int argc, char *argv[])
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(Message);
 
-    SDL_PauseAudioDevice(audio_device, 1); // stop sine wave generator
-    SDL_CloseAudioDevice(audio_device);
+    audioDeviceDisable(audio_device);
+    audioDeviceClose(audio_device);
+
     SDL_DestroyWindow(window);
     SDL_Quit();
 
