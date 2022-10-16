@@ -4,17 +4,10 @@
 #include <iostream>
 #include <math.h>
 
+#include "audio.h"
+
 const int WIDTH = 800, HEIGHT = 600;
 using namespace std;
-
-void transferSamples(void* data, uint8_t* out, int len);
-
-struct mySound
-{
-    double time;
-    double freq;
-    double vol;
-};
 
 int main(int argc, char *argv[])
 {
@@ -117,15 +110,4 @@ int main(int argc, char *argv[])
     SDL_Quit();
 
     return EXIT_SUCCESS;
-}
-
-void transferSamples(void* data, uint8_t* out, int len)
-{
-    mySound* sound = (mySound*) data;
-    int16_t* outBuffer = (int16_t*) out;
-    for(int i =0; i< len/2; ++ i)
-    {
-        sound->time += 1.0/44100;
-        outBuffer[i] = (int16_t)(sound->vol * sinf(sound->freq * sound->time * 3.1415192f * 2));
-    }
 }
