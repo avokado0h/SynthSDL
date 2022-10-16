@@ -1,7 +1,8 @@
 #OBJS specifies which files to compile as part of the project
 OBJS = main.cpp\
 		audio.cpp\
-		render.cpp
+		render.cpp\
+		input.cpp
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = MySynth

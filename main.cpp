@@ -5,6 +5,7 @@
 
 #include "audio.h"
 #include "render.h"
+#include "input.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
     // init sdl
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) 
         std::cout << "SDL2 init error: " << SDL_GetError() << std::endl;
+
     // init screen, renderer and font
     if (screenInit(&ctrl, SCREEN_WIDTH, SCREEN_HEIGHT) == EXIT_FAILURE) 
         std::cout << "SDL2 error: " << SDL_GetError() << " ttf: "<< TTF_GetError() << std::endl;
@@ -27,33 +29,22 @@ int main(int argc, char *argv[])
     
     audioDeviceEnable(audio_device);
 
+    inputVars myInputs = {0};
+
     // main event loop
-    SDL_Event windowEvent;
-    int MouseX, MouseY;
     while (true)
     {
-        if (SDL_PollEvent(&windowEvent))
-        {
-            if (windowEvent.type == SDL_QUIT)
-            {
-                break;
-            }
-
-            if (windowEvent.type == SDL_MOUSEWHEEL)
-            {
-                if(windowEvent.wheel.y > 0) sine.vol += 100;
-                else if(windowEvent.wheel.y < 0) sine.vol -= 100;
-            }
-        }
-
         // get input
-        SDL_GetMouseState(&MouseX, &MouseY);
+        getInputs(&myInputs);
+        // check if app closed
+        if(myInputs.exit) break;
+        // update vars
+        sine.vol = myInputs.vol;
 
-        //draw display
+        // draw bgnd color
         screenClear(&ctrl);
-
-        screenTxtWrite("Was Geht aaab!",&ctrl, MouseX, MouseY);
-
+        // draw string
+        screenTxtWrite("Was Geht aaab!",&ctrl, myInputs.mouse.x, myInputs.mouse.y);
         // diplay update
         screenUpdate(&ctrl);
     }
