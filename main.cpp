@@ -5,7 +5,14 @@
 const int WIDTH = 800, HEIGHT = 600;
 using namespace std;
 
-void testPrint();
+void transferSamples(void* data, uint8_t* out, int len);
+
+struct mySound
+{
+    double time;
+    double freq;
+    double vol;
+};
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +32,8 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
+    mySound sine = {0.0, 1000.0, 5000.0};
+
     // opening an audio device:
     SDL_AudioSpec audio_spec;
     SDL_zero(audio_spec);
@@ -32,7 +41,9 @@ int main(int argc, char *argv[])
     audio_spec.format = AUDIO_S16SYS;
     audio_spec.channels = 1;
     audio_spec.samples = 1024;
-    audio_spec.callback = NULL;
+    audio_spec.callback = transferSamples;
+    audio_spec.userdata = &sine;
+
 
     SDL_AudioDeviceID audio_device;
     audio_device = SDL_OpenAudioDevice(NULL, 0, &audio_spec, NULL, 0);
@@ -40,36 +51,30 @@ int main(int argc, char *argv[])
     // main event loop
     SDL_Event windowEvent;
 
-        // pushing 3 seconds of samples to the audio buffer:
-    float x = 0;
-    for (int i = 0; i < audio_spec.freq * 3; i++) {
-        x += .010f;
-
-        // SDL_QueueAudio expects a signed 16-bit value
-        // note: "5000" here is just gain so that we will hear something
-        int16_t sample = sin(x * 4) * 5000;
-
-        const int sample_size = sizeof(int16_t) * 1;
-        SDL_QueueAudio(audio_device, &sample, sample_size);
-    }
-
-    // unpausing the audio device (starts playing):
-    SDL_PauseAudioDevice(audio_device, 0);
-    testPrint();
-
-    SDL_Delay(3000);
-
+int MouseX, MouseY;
+cout << "eyoooo\n";
+    SDL_PauseAudioDevice(audio_device, 0); // start sine wave generator
     while (true)
     {
         if (SDL_PollEvent(&windowEvent))
         {
-            if (SDL_QUIT == windowEvent.type)
+            if (windowEvent.type == SDL_QUIT)
             {
                 break;
             }
+
+            if (windowEvent.type == SDL_MOUSEWHEEL)
+            {
+                if(windowEvent.wheel.y > 0) sine.vol += 100;
+                else if(windowEvent.wheel.y < 0) sine.vol -= 100;
+            }
         }
+
+        SDL_GetMouseState(&MouseX, &MouseY);
+        cout << "MouseX: " << MouseX << " MouseY: " << MouseY << endl;
     }
 
+    SDL_PauseAudioDevice(audio_device, 1); // stop sine wave generator
     SDL_CloseAudioDevice(audio_device);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -77,7 +82,13 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
-void testPrint()
+void transferSamples(void* data, uint8_t* out, int len)
 {
-    cout << "test\n";
+    mySound* sound = (mySound*) data;
+    int16_t* outBuffer = (int16_t*) out;
+    for(int i =0; i< len/2; ++ i)
+    {
+        sound->time += 1.0/44100;
+        outBuffer[i] = (int16_t)(sound->vol * sinf(sound->freq * sound->time * 3.1415192f * 2));
+    }
 }
