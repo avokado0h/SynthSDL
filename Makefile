@@ -1,12 +1,11 @@
-#OBJS specifies which files to compile as part of the project
-OBJS = main.cpp\
-		audio.cpp\
-		render.cpp\
-		input.cpp
+# Makefile SDL Synth 
 
-#OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = MySynth
+SRC = main.cpp audio.cpp render.cpp input.cpp # source files
+TARGET = MySynth # final application
+INCLUDE = C:\SoftDev\SDL\include # include dir header files
+LIB = C:\SoftDev\SDL\lib # precompiled libraries
+CFLAGS = -Wall -w -Wl,-subsystem,console # compiler flags
+LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf # linker flags
 
-#This is the target that compiles our executable
-all : $(OBJS)
-	g++ $(OBJS) -IC:\SoftDev\SDL\include -LC:\SoftDev\SDL\lib -w -Wl,-subsystem,console -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -o $(OBJ_NAME)
+all : $(SRC)
+	g++ $(SRC) -I$(INCLUDE) -L$(LIB) $(CFLAGS) $(LDFLAGS) -o $(TARGET)

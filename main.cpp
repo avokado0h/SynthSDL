@@ -17,7 +17,6 @@ int remapFreq(int x);
 
 int main(int argc, char *argv[])
 {
-
     screenCtrl  ctrl = {0};
     inputVars   myInputs = {0};
     mySound     sndCtrl;
