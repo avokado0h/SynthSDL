@@ -29,7 +29,6 @@ void audioDeviceInit(mySound* sndCtrl, SDL_AudioCallback funcPtr)
     audio_spec.userdata = sndCtrl; // audio callback function gets called with this struct
 
     // configure soundcard
-    SDL_AudioDeviceID audio_device;
     sndCtrl->audio_device = SDL_OpenAudioDevice(NULL, 0, &audio_spec, NULL, 0);
 }
 

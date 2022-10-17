@@ -1,11 +1,22 @@
-# Makefile SDL Synth 
+# Makefile SynthSDL
 
-TARGET 	= MySynth # final application
-SRC		= $(wildcard */*.cpp)
-INC 	= -IC:/SoftDev/SDL2/include -I./include # include dir header files
-LIB 	= -LC:/SoftDev/SDL2/lib # precompiled libraries
-CFLAGS 	= -Wall -w -Wl,-subsystem,console # compiler flags
-LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf # linker flags
+# final application
+TARGET = MySynth
+
+# find .cpp files and compile
+SRC = $(wildcard */*.cpp)
+
+# include dir header files
+INC = -IC:/SoftDev/SDL2/include -I./include 
+
+# precompiled libraries
+LIB = -LC:/SoftDev/SDL2/lib 
+
+# compiler flags
+CFLAGS = -Wall #-w -Wl,-subsystem,console 
+
+# linker flags
+LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf 
 
 all : $(SRC)
 	g++ $(SRC) $(INC) $(LIB) $(CFLAGS) $(LDFLAGS) -o $(TARGET)
