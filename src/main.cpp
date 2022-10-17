@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
         // update vars
         sndCtrl.vol = myInputs.vol;
         sndCtrl.freq = remapFreq(myInputs.mouse.x);
-        std::cout << remapFreq(myInputs.mouse.x) << std::endl;
+        
+        //std::cout << remapFreq(myInputs.mouse.x) << std::endl;
 
 
         // draw bgnd color

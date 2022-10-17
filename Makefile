@@ -13,7 +13,7 @@ INC = -IC:/SoftDev/SDL2/include -I./include
 LIB = -LC:/SoftDev/SDL2/lib 
 
 # compiler flags
-CFLAGS = -Wall #-w -Wl,-subsystem,console 
+CFLAGS = -Wall -g #-w -Wl,-subsystem,console 
 
 # linker flags
 LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf 

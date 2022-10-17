@@ -1,0 +1,12 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "My Build",
+            "group": "build",
+            "type": "shell",
+            "command": "C:/SoftDev/MinGW/bin/mingw32-make.exe",
+            "args": ["--makefile=${workspaceFolder}/Makefile"]
+        }
+    ]
+}
